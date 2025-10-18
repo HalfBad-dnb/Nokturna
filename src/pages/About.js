@@ -139,7 +139,7 @@ const About = () => {
                         fontSize: '1.5rem'
                       }}
                     >
-                      Augustė Čiplytė
+                      Your Name
                     </Typography>
                     <Typography 
                       variant="subtitle1"
@@ -186,7 +186,7 @@ const About = () => {
                         fontSize: '1.5rem'
                       }}
                     >
-                      Lukas Misiūnas
+                      Your Name
                     </Typography>
                     <Typography 
                       variant="subtitle1"
