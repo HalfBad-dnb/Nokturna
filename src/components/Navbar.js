@@ -1,8 +1,88 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import React, { useState } from 'react';
+import { 
+  AppBar, 
+  Toolbar, 
+  Typography, 
+  Button, 
+  Box, 
+  IconButton, 
+  Drawer, 
+  List, 
+  ListItem, 
+  ListItemText,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 import { Link } from 'react-router-dom';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const navItems = [
+    { text: 'Home', to: '/' },
+    { text: 'Services', to: '/services' },
+    { text: 'Gallery', to: '/gallery' },
+    { text: 'About Us', to: '/about' },
+    { text: 'Contact', to: '/contact' },
+  ];
+
+  const drawer = (
+    <Box
+      sx={{
+        width: 250,
+        height: '100%',
+        background: 'rgba(15, 12, 41, 0.95)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        padding: '20px 0',
+      }}
+      role="presentation"
+      onClick={handleDrawerToggle}
+    >
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: '0 16px' }}>
+        <IconButton onClick={handleDrawerToggle} sx={{ color: 'white' }}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
+      <List>
+        {navItems.map((item) => (
+          <ListItem 
+            button="true"
+            key={item.text} 
+            component={Link} 
+            to={item.to}
+            sx={{
+              color: 'white',
+              '&:hover': {
+                color: '#00f0ff',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              },
+              padding: '12px 24px',
+              margin: '4px 0',
+            }}
+          >
+            <ListItemText 
+              primary={item.text}
+              sx={{
+                '& .MuiListItemText-primary': {
+                  fontSize: '1.1rem',
+                  fontWeight: 500,
+                }
+              }}
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
   return (
     <AppBar position="fixed" sx={{ 
       backgroundColor: 'transparent',
@@ -43,7 +123,7 @@ const Navbar = () => {
           Your Logo
         </Typography>
         <Box sx={{ 
-          display: 'flex', 
+          display: { xs: 'none', md: 'flex' }, 
           gap: '1.5rem',
           '& .MuiButton-root': {
             color: 'rgba(255, 255, 255, 0.9)',
@@ -53,14 +133,14 @@ const Navbar = () => {
             position: 'relative',
             textShadow: '0 1px 3px rgba(0,0,0,0.5)',
             '&:hover': {
-              color: '#fff',
+              color: '#00f0ff',
               backgroundColor: 'transparent',
-              textShadow: '0 0 8px rgba(255,255,255,0.8)',
+              textShadow: '0 0 8px rgba(0, 240, 255, 0.8)',
               '&::after': {
                 width: '100%',
                 left: 0,
-                backgroundColor: '#fff',
-                boxShadow: '0 0 10px #fff'
+                backgroundColor: '#00f0ff',
+                boxShadow: '0 0 10px #00f0ff'
               }
             },
             '&::after': {
@@ -83,63 +163,68 @@ const Navbar = () => {
             }
           }
         }}>
-          <Button color="inherit" component={Link} to="/">
-            Home
-          </Button>
-          <Button 
-            color="inherit" 
-            component={Link} 
-            to="/services"
+{navItems.map((item) => (
+            <Button
+              key={item.text}
+              color="inherit"
+              component={Link}
+              to={item.to}
+              sx={{
+                '&:hover': {
+                  color: '#00f0ff',
+                  textShadow: '0 0 10px rgba(0, 240, 255, 0.8)'
+                }
+              }}
+            >
+              {item.text}
+            </Button>
+          ))}
+        </Box>
+        
+        {/* Mobile menu button */}
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge={isMobile ? 'start' : false}
+            onClick={handleDrawerToggle}
             sx={{
+              color: 'white',
               '&:hover': {
                 color: '#00f0ff',
-                textShadow: '0 0 10px rgba(0, 240, 255, 0.8)'
               }
             }}
           >
-            Services
-          </Button>
-          <Button 
-            color="inherit" 
-            component={Link} 
-            to="/gallery"
-            sx={{
-              '&:hover': {
-                color: '#00f0ff',
-                textShadow: '0 0 10px rgba(0, 240, 255, 0.8)'
-              }
-            }}
-          >
-            Gallery
-          </Button>
-          <Button 
-            color="inherit" 
-            component={Link} 
-            to="/about"
-            sx={{
-              '&:hover': {
-                color: '#00f0ff',
-                textShadow: '0 0 10px rgba(0, 240, 255, 0.8)'
-              }
-            }}
-          >
-            About Us
-          </Button>
-          <Button 
-            color="inherit" 
-            component={Link} 
-            to="/contact"
-            sx={{
-              '&:hover': {
-                color: '#00f0ff',
-                textShadow: '0 0 10px rgba(0, 240, 255, 0.8)'
-              }
-            }}
-          >
-            Contact
-          </Button>
+            <MenuIcon />
+          </IconButton>
         </Box>
       </Toolbar>
+      
+      {/* Mobile drawer */}
+      <Box component="nav">
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile
+          }}
+          sx={{
+            display: { xs: 'block', md: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: 250,
+              border: 'none',
+              backgroundColor: 'transparent',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              boxShadow: 'none',
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
     </AppBar>
   );
 };

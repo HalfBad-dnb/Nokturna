@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, styled } from '@mui/material';
+import { Box, styled, useMediaQuery, useTheme } from '@mui/material';
 import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const SocialContainer = styled(Box)(({ theme }) => ({
@@ -16,11 +16,8 @@ const SocialContainer = styled(Box)(({ theme }) => ({
   border: '1px solid rgba(255, 255, 255, 0.2)',
   backdropFilter: 'blur(5px)',
   boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-  '@media (max-width: 768px)': {
-    right: '15px',
-    top: '20px',
-    gap: '12px',
-    padding: '12px 8px',
+  [theme.breakpoints.down('md')]: {
+    display: 'none',      
   }
 }));
 
@@ -48,6 +45,12 @@ const SocialIcon = styled('a')(({ theme }) => ({
 }));
 
 const SocialLinks = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  if (isMobile) {
+    return null;
+  }
   const socialLinks = [
     { icon: <FaGithub />, url: 'https://github.com/yourusername' },
     { icon: <FaLinkedin />, url: 'https://linkedin.com/in/yourusername' },

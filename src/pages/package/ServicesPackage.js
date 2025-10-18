@@ -93,9 +93,9 @@ const ServicesPackage = () => {
         </Box>
 
         {/* Pricing Cards */}
-        <Grid container spacing={2} justifyContent="space-between" alignItems="stretch" sx={{ width: '100%', margin: '0 auto' }}>
+        <Grid container spacing={4} direction={{ xs: 'column', md: 'row' }} justifyContent="center" alignItems="stretch" sx={{ width: '100%', margin: '0 auto' }}>
           {packages.map((pkg, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index} sx={{ display: 'flex', minWidth: 0, flex: '1 1 0px', maxWidth: '100%' }}>
+            <Grid size={{ xs: 12, md: 3 }} key={index} sx={{ display: 'flex', minWidth: 0, width: { xs: '100%', md: 'auto' }, flex: { xs: '0 0 auto', md: '1 1 0px' }, maxWidth: { xs: '100%', md: 'none' } }}>
               <Card sx={{
                 width: '100%',
                 display: 'flex',
@@ -114,7 +114,7 @@ const ServicesPackage = () => {
                   border: `2px solid ${pkg.color}`,
                 },
                 position: 'relative',
-                zIndex: pkg.bestValue ? 2 : 1,
+                ...(pkg.bestValue ? { zIndex: 2 } : { zIndex: 1 })
               }}>
                 {pkg.popular && (
                   <Box sx={{
